@@ -53,7 +53,7 @@
 #define FB_E0 0.0
 
 // JMA 6-8-12
-#define FB_INC -1.0 /* randomized inclinations */
+#define FB_INC 80.0
 #define FB_PERIARG_IN -1.0 /* randomized argument of periapsis */
 #define FB_PERIARG_OUT -1.0 /* randomized argument of periapsis */
 

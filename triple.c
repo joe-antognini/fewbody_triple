@@ -27,6 +27,8 @@
 #include <getopt.h>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_rng.h>
+#include <fcntl.h>
+#include <unistd.h>
 //#include <assert.h>
 #include "fewbody.h"
 #include "triple.h"
@@ -103,7 +105,7 @@ int calc_units(fb_obj_t *obj[1], fb_units_t *units)
 int main(int argc, char *argv[])
 {
   int i, j;
-  unsigned long int seed;
+  unsigned long int seed, input_seed;
   double m000, m001, m01, r000, r001, r01, a00, a0, e00, e0, inc, peri_in;
   double peri_out, inc_in, inc_out;
   double Ei, Lint[3], Li[3], t;
@@ -111,6 +113,8 @@ int main(int argc, char *argv[])
   fb_input_t input;
   fb_ret_t retval;
   fb_units_t units;
+  int random_data;
+  ssize_t result;
   char string1[FB_MAX_STRING_LENGTH], string2[FB_MAX_STRING_LENGTH];
   gsl_rng *rng;
   const gsl_rng_type *rng_type=gsl_rng_mt19937;
@@ -167,7 +171,7 @@ int main(int argc, char *argv[])
   input.outfreq = FB_OUTFREQ;
   input.tidaltol = FB_TIDALTOL;
   input.fexp = FB_FEXP;
-  seed = FB_SEED;
+  input_seed = FB_SEED;
   input.speedtol = FB_SPEEDTOL;
   input.PN1 = FB_PN1;
   input.PN2 = FB_PN2;
@@ -293,7 +297,7 @@ int main(int argc, char *argv[])
       input.ks = atoi(optarg);
       break;
     case 's':
-      seed = atol(optarg);
+      input_seed = atol(optarg);
       break;
     case 'd':
       fb_debug = 1;
@@ -315,6 +319,16 @@ int main(int argc, char *argv[])
   if (optind < argc) {
     print_usage(stdout);
     return(1);
+  }
+
+  // JMA 10-26-2013 -- If no seed given, draw random bits from
+  // /dev/urandom.
+  if (input_seed == FB_SEED) {
+    random_data = open("/dev/urandom", O_RDONLY);
+    result = read(random_data, &seed, sizeof seed);
+    close(random_data);
+  } else {
+    seed = input_seed;
   }
 
   /* initialize a few things for integrator */
