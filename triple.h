@@ -21,11 +21,11 @@
 #define FB_TIDALTOL 1.0e-5
 #define FB_SPEEDTOL 1.0e-4
 
-#define FB_PN1 1
-#define FB_PN2 1
-#define FB_PN25 1
-#define FB_PN3 1
-#define FB_PN35 1
+#define FB_PN1 0
+#define FB_PN2 0
+#define FB_PN25 0
+#define FB_PN3 0
+#define FB_PN35 0
 
 /* numbering convention:
 
@@ -47,7 +47,7 @@
 #define FB_R01 (0.0 * FB_CONST_RSUN)
 
 #define FB_A00 (1.0 * FB_CONST_AU)
-#define FB_A0 (2.0 * FB_CONST_AU)
+#define FB_A0 (10.0 * FB_CONST_AU)
 
 #define FB_E00 0.0
 #define FB_E0 0.0
